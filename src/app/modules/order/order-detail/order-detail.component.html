@@ -1,0 +1,170 @@
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full mt-8 p-8">
+    <!-- Recent transactions table -->
+    <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+
+        <div class="p-6">
+            <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Son işlemler</div>
+            <div class="text-secondary font-medium">{{pendingStatus}} bekliyor, {{completedStatus}} tamamlandı</div>
+        </div>
+        <div class="overflow-x-auto mx-6">
+
+            <table
+                class="w-full bg-transparent"
+                mat-table
+                matSort
+                [dataSource]="(orders$ | async).OrderDetail?.order_details"
+            >
+                <ng-container matColumnDef="product_id">
+                    <th
+                        mat-header-cell
+                        mat-sort-header
+                        *matHeaderCellDef>
+                        Ürün No
+                    </th>
+                    <td
+                        mat-cell
+                        *matCellDef="let detail">
+                                <span class="pr-6 whitespace-nowrap">
+                                    {{detail.product_id}}
+                                </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="product_name">
+                    <th
+                        mat-header-cell
+                        mat-sort-header
+                        *matHeaderCellDef>
+                        Ürün Adı
+                    </th>
+                    <td
+                        mat-cell
+                        *matCellDef="let detail">
+                                <span class="pr-6 whitespace-nowrap">
+                                    {{detail.product_name}}
+                                </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="product_price">
+                    <th
+                        mat-header-cell
+                        mat-sort-header
+                        *matHeaderCellDef>
+                        Ürün Fiyatı
+                    </th>
+                    <td
+                        mat-cell
+                        *matCellDef="let detail">
+                                <span class="pr-6 font-medium whitespace-nowrap">
+                                    {{detail.product_price | currency:'TRY':true}}
+                                </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="product_short_description">
+                    <th
+                        mat-header-cell
+                        mat-sort-header
+                        *matHeaderCellDef>
+                        Ürün Açıklama
+                    </th>
+                    <td
+                        mat-cell
+                        *matCellDef="let detail">
+                                <span class="pr-6 whitespace-nowrap">
+                                    {{detail.product_short_description}}
+                                </span>
+                    </td>
+                </ng-container>
+
+                <!-- Status -->
+                <ng-container matColumnDef="status">
+                    <th
+                        mat-header-cell
+                        mat-sort-header
+                        *matHeaderCellDef>
+                        Sipariş Durumu
+                    </th>
+                    <td
+                        mat-cell
+                        *matCellDef="let transaction">
+                                <span
+                                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': transaction.status === 'pending',
+                                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': transaction.status === 'Confirmed'}">
+                                    <span class="leading-relaxed whitespace-nowrap">{{transaction.status}}</span>
+                                </span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="cancel">
+                    <th
+                        mat-header-cell
+                        mat-sort-header
+                        *matHeaderCellDef>
+                    </th>
+                    <td mat-cell
+                        *matCellDef="let detail">
+                        <mat-icon [svgIcon]="'heroicons_outline:x'" style="color: red"></mat-icon>
+                    </td>
+                </ng-container>
+
+
+                <tr
+                    mat-header-row
+                    *matHeaderRowDef="ordersTableColumns"></tr>
+                <tr
+                    class="order-row h-16"
+                    mat-row
+                    *matRowDef="let row; columns: ordersTableColumns;"></tr>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- Budget -->
+    <div class="flex flex-col flex-auto p-6 bg-card rounded-2xl shadow">
+        <div class="flex items-center">
+            <div class="flex flex-col">
+                <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Sipariş Özeti</div>
+                <div class="text-secondary font-medium">{{createdDate | date: 'dd.MM.YYYY'}}</div>
+            </div>
+        </div>
+        <div class="my-8 space-y-8">
+            <div class="flex flex-col">
+                <ng-container *ngIf="(orders$ | async).OrderDetail as orders;">
+                    <div class="flex items-center">
+
+                        <div class="flex-auto ml-4 leading-none">
+                            <div
+                                class="mt-2 font-medium text-2xl">{{orders.customer.first_name + " " + orders.customer.last_name}}</div>
+                            <div class="mt-2 text-sm font-medium text-secondary">{{orders.customer.nation_number}}</div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="mt-6">
+                Last month; you had <strong>223</strong> expense transactions, <strong>12</strong> savings entries and
+                <strong>4</strong> bills.
+            </div>
+            <hr/>
+            <div class="flex flex-row flex-wrap mt-4 -mx-6">
+                <div class="flex flex-col mx-6 my-3">
+                    <div class="text-sm font-medium leading-none text-secondary">Toplam</div>
+                    <div class="mt-2 font-medium text-3xl leading-none">Ödenecek Tutar:</div>
+                </div>
+                <div class="flex flex-col mx-6 my-3">
+                    <div class="text-sm font-medium leading-none text-secondary">Tutar</div>
+                    <div class="mt-2 font-medium text-3xl leading-none">{{totalAmount | currency:'TRY':true}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center mt-auto">
+            <button
+                class="mt-2"
+                mat-stroked-button>
+                Download Summary
+            </button>
+        </div>
+    </div>
+</div>

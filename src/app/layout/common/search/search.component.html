@@ -1,0 +1,47 @@
+<button
+        mat-icon-button
+        *ngIf="!opened"
+        (click)="open();mainservice.selectedCustomer=null;selected=false">
+    <mat-icon *ngIf="!mainservice.selectedCustomer"  class="text-current" [svgIcon]="'mat_outline:person_search'"></mat-icon>
+    <mat-icon *ngIf="mainservice.selectedCustomer"  class="text-current" [svgIcon]="'mat_outline:close'"></mat-icon>
+    </button>
+    <div
+        class="absolute inset-0 flex items-center flex-shrink-0 z-99 bg-card"
+        *ngIf="opened"
+        @slideInTop
+        @slideOutTop>
+        <mat-icon
+            class="absolute ml-6 sm:ml-8"
+            [svgIcon]="'heroicons_outline:search'"></mat-icon>
+        <input
+            class="w-full h-full px-16 sm:px-18"
+            [formControl]="searchControl"
+            #autocomplete="matAutocompleteTrigger"
+            [matAutocomplete]="matAutocomplete"
+            [placeholder]="'Müşteri Ara'"
+            (keydown)="onKeydown($event);selected=true"
+            #barSearchInput>
+        <mat-autocomplete
+            class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
+            [disableRipple]="true"
+            #matAutocomplete="matAutocomplete" >
+            <ng-container *ngIf="selected&&(customer$ | async).CustomersSearch as customers">
+                <mat-option *ngFor="let customer of customers" (onSelectionChange)="setSelection(customer);close();"
+                            class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover">
+                    {{customer.first_name}} {{customer.last_name}}
+                </mat-option>
+                <mat-option
+                    class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+                    *ngIf="customers && !customers.length">
+                    Bulunamadı!
+                </mat-option>
+            </ng-container>
+        </mat-autocomplete>
+        <button
+            class="absolute top-1/2 right-5 sm:right-7 flex-shrink-0 w-10 h-10 -mt-5"
+            mat-icon-button
+            (click)="close();clearCustomer();">
+            <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+

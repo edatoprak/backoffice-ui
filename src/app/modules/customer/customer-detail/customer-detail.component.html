@@ -1,0 +1,213 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full max-w-4xl">
+            <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
+                Müşteri Detay
+            </div>
+            <!-- Form -->
+            <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <div class="flex items-center ml-auto mb-1">
+                    <button
+                        mat-stroked-button>
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                        <span class="ml-2">Edit</span>
+                    </button>
+                </div>
+                <ng-container>
+                    <form [formGroup]="customerForm" class="flex flex-col w-full">
+                        <ng-container *ngIf="(customers$ | async).CustomerDetail as detail;">
+                            <div class="flex flex-col sm:flex-row p-8">
+                                <div class="flex flex-auto flex-wrap">
+                                    <!-- Name, SKU & etc. -->
+                                    <ng-container *ngFor="let customer of customerForm.get('customers')['controls']; let i = index;">
+                                        <div class="flex flex-col w-full lg:w-2/4 sm:pl-8">
+                                            <mat-form-field class="w-full">
+                                                <mat-label>Ad</mat-label>
+                                                <mat-icon
+                                                    matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                                <input
+                                                    matInput
+                                                    [formControl]="customer.get('first_name')"
+                                                    [placeholder]="'Ad'"
+                                                    [spellcheck]="false">
+                                            </mat-form-field>
+                                            <mat-form-field class="w-full">
+                                                <mat-label>Kimlik No</mat-label>
+                                                <mat-icon
+                                                    matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                                <input
+                                                    matInput
+                                                    [formControl]="customer.get('nation_number')"
+                                                    [placeholder]="'Kimlik No'">
+                                            </mat-form-field>
+
+                                        </div>
+                                        <div class="flex flex-col w-full lg:w-2/4 sm:pl-8">
+                                            <mat-form-field class="w-full">
+                                                <mat-label>Soyad</mat-label>
+                                                <mat-icon
+                                                    matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                                <input
+                                                    matInput
+                                                    [formControl]="customer.get('last_name')"
+                                                    [placeholder]="'Soyad'"
+                                                    [spellcheck]="false">
+                                            </mat-form-field>
+                                            <mat-form-field class="w-full">
+                                                <mat-label>Doğum Günü</mat-label>
+                                                <mat-icon
+                                                    matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:cake'"></mat-icon>
+                                                <input
+                                                    matInput
+                                                    [matDatepicker]="birthdayDatepicker"
+                                                    [placeholder]="'Birthday'">
+                                                <mat-datepicker-toggle
+                                                    matSuffix
+                                                    [for]="birthdayDatepicker">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #birthdayDatepicker></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                    </ng-container>
+
+                                </div>
+
+                            </div>
+                            <div class="flex flex-col sm:flex-row p-8">
+                                <div class="flex flex-auto flex-wrap">
+                                    <div class="flex flex-col w-full lg:w-full sm:pl-8">
+                                        <ng-container
+                                            *ngFor="let item of customerForm.get('address')['controls']; let i = index;">
+                                            <div class="rounded-lg bg-blue-50 groupla">
+                                                <h2>{{i + 1}}. Adres</h2>
+                                                <mat-form-field
+                                                    class="w-1/3 pr-2">
+                                                    <mat-label>Başlık</mat-label>
+                                                    <mat-icon
+                                                        matPrefix
+                                                        class="hidden sm:flex icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:tag'"></mat-icon>
+                                                    <input
+                                                        matInput
+                                                        [placeholder]="'Başlık'"
+                                                        [formControl]="item.get('contact_description')">
+                                                </mat-form-field>
+                                                <mat-form-field class="w-2/3 pr-2">
+                                                    <mat-label>Adres</mat-label>
+                                                    <mat-icon
+                                                        matPrefix
+                                                        class="hidden sm:flex icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                                    <input
+                                                        matInput
+                                                        [formControl]="item.get('contact_value')"
+                                                        [placeholder]="'Adres'">
+                                                </mat-form-field>
+                                                <mat-form-field class="w-1/3 pr-2">
+                                                    <mat-label>Ülke</mat-label>
+                                                    <mat-icon
+                                                        matPrefix
+                                                        class="hidden sm:flex icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                                    <input
+                                                        matInput
+                                                        [formControl]="item.get('country_name')"
+                                                        [value]="item.country_id"
+                                                        [placeholder]="'Ülke'">
+                                                </mat-form-field>
+                                                <mat-form-field class="w-1/3 pr-2">
+                                                    <mat-label>İl</mat-label>
+                                                    <mat-icon
+                                                        matPrefix
+                                                        class="hidden sm:flex icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                                    <input
+                                                        matInput
+                                                        [formControl]="item.get('city_name')"
+                                                        [value]="item.city_id"
+                                                        [placeholder]="'İl'">
+                                                </mat-form-field>
+                                                <mat-form-field class="w-1/3 pr-2">
+                                                    <mat-label>İlçe</mat-label>
+                                                    <mat-icon
+                                                        matPrefix
+                                                        class="hidden sm:flex icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                                    <input
+                                                        matInput
+                                                        [formControl]="item.get('district_name')"
+                                                        [value]="item.district_id"
+                                                        [placeholder]="'İlçe'">
+                                                </mat-form-field>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container
+                                            *ngFor="let item of customerForm.get('phoneNumbers')['controls']; let i = index;">
+                                            <div class="rounded-lg bg-blue-50 groupla mt-8">
+                                                <h2>Telefon</h2>
+                                                <mat-form-field
+                                                    class="w-1/3 pr-2">
+                                                    <mat-label>Açıklama</mat-label>
+                                                    <mat-icon
+                                                        matPrefix
+                                                        class="hidden sm:flex icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:tag'"></mat-icon>
+                                                    <input
+                                                        matInput
+                                                        [formControl]="item.get('contact_description')"
+                                                        [placeholder]="'Açıklama'">
+                                                </mat-form-field>
+                                                <mat-form-field class="w-2/3 pr-2">
+                                                    <mat-label>Telefon</mat-label>
+                                                    <mat-icon
+                                                        matPrefix
+                                                        class="hidden sm:flex icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:phone'"></mat-icon>
+                                                    <input
+                                                        matInput
+                                                        [formControl]="item.get('contact_value')"
+                                                        [placeholder]="'Telefon'">
+                                                </mat-form-field>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <div class="flex items-center justify-between w-full border-t px-8 py-4">
+                            <button
+                                class="-ml-4"
+                                mat-button
+                                [color]="'warn'">
+                                Cancel
+                            </button>
+                            <div class="flex items-center">
+
+                                <button
+                                    mat-flat-button
+                                    [color]="'primary'"
+                                    (click)="updateCustomer()">
+                                    Update
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+

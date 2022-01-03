@@ -1,0 +1,186 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full max-w-4xl">
+            <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
+
+            </div>
+            <!-- Form -->
+            <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <ng-container>
+                    <form [formGroup]="userForm" #supportNgForm="ngForm" class="flex flex-col w-full">
+                        <ng-container>
+                            <div class="flex flex-col sm:flex-row p-8">
+                                <div class="flex flex-auto flex-wrap">
+                                    <div>
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <mat-label>Ad</mat-label>
+                                            <mat-icon
+                                                matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                            <input
+                                                matInput
+                                                [placeholder]="'Ad'"
+                                                [formControlName]="'first_name'"
+                                                [spellcheck]="false">
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <mat-label>Soyad</mat-label>
+                                            <mat-icon
+                                                matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                            <input
+                                                matInput
+                                                [placeholder]="'Soyad'"
+                                                [formControlName]="'last_name'"
+                                                [spellcheck]="false">
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <mat-label>Telefon</mat-label>
+                                            <mat-icon
+                                                matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:phone'"></mat-icon>
+                                            <input
+                                                matInput
+                                                [formControlName]="'phone_number'"
+                                                [placeholder]="'Telefon'">
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <mat-label>E-posta</mat-label>
+                                            <mat-icon
+                                                matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                            <input
+                                                matInput
+                                                [formControlName]="'email'"
+                                                [placeholder]="'E-posta'">
+                                        </mat-form-field>
+
+
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <mat-label>Ülke</mat-label>
+                                            <mat-icon
+                                                matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                            <mat-select [formControlName]="'country_id'" placeholder="Ülke"
+                                                        (selectionChange)='selectChangedCountry($event)'>
+                                                <mat-option *ngFor="let country of (countries$ | async).Countries"
+                                                            [value]="country.country_id">
+                                                    {{country.country_name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <mat-label>İl</mat-label>
+                                            <mat-icon
+                                                matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                            <mat-select [formControlName]="'city_id'" placeholder="İl"
+                                                        (selectionChange)='selectChangedCity($event)'>
+                                                <mat-option *ngFor="let city of (cities$ | async).Cities"
+                                                            [value]="city.city_id">
+                                                    {{ city.city_name }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <mat-label>İlçe</mat-label>
+                                            <mat-icon
+                                                matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                            <mat-select [formControlName]="'district_id'"
+                                                        placeholder="İlçe">
+                                                <mat-option *ngFor="let district of (districts$ | async).Districts"
+                                                            [value]="district.district_id">
+                                                    {{district.district_name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <mat-label>Adres</mat-label>
+                                            <mat-icon
+                                                matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                            <input
+                                                matInput
+                                                [formControlName]="'address'"
+                                                [placeholder]="'Adres'">
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <input matInput style="display:none">
+                                            <input
+                                                placeholder="New role..."
+                                                #roleInput
+                                                [formControl]="roleCtrl"
+                                                [matAutocomplete]="auto"
+                                                [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                (matChipInputTokenEnd)="add($event);  $event.chipInput!.clear();">
+                                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                                <mat-option *ngFor="let role of allRoles" [value]="role.role_id">
+                                                    {{role.role_name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full lg:w-2/4 px-2">
+                                            <mat-label>Unvan</mat-label>
+                                            <mat-icon
+                                                matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                            <input
+                                                matInput
+                                                [formControlName]="'title'"
+                                                [placeholder]="'Unvan'">
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="w-full lg:w-2/4 px-2">
+                                        <mat-chip-list #chipList aria-label="Fish selection">
+                                            <mat-chip *ngFor="let role of roles" selected
+                                                      [removable]="removable"
+                                                      (removed)="remove(role)">{{role}}
+                                                <button class="mb-2" matChipRemove *ngIf="removable">
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                        </mat-chip-list>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <div class="flex items-center justify-between w-full border-t px-8 py-4">
+                            <div
+                                class="-ml-4">
+
+                            </div>
+                            <div class="flex items-center">
+
+                                <button
+                                    mat-flat-button
+                                    [color]="'primary'"
+                                    (click)="updateUser()">
+                                    Güncelle
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+

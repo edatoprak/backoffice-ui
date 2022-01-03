@@ -1,0 +1,136 @@
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full mt-8 px-6 ">
+    <ng-container  *ngIf="mainservice.selectedCustomer&&customer_id&&customer_id>0 else customer_none">
+        <div class=" p-6 xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl   overflow-hidden  mb-4">
+            <div class="p-6">
+                <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Ürün Listesi</div>
+            </div>
+            <div class="overflow-x-auto mx-6 h-full">
+                <ng-container *ngIf="(carts$ | async) as carts;">
+                    <table class="w-full bg-transparent  overflow-y-auto" mat-table
+                           [dataSource]="carts.order_details" [trackBy]="trackByFn" #recentTransactionsTable>
+                        <!--
+    listCol = ["id","product_barcode", "product_name", "product_name", "product_short_description", "product_price", "status"];-->
+                        <ng-container matColumnDef="id">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef>
+                                No
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let transaction;let i = index">
+                                 <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                     {{i+1}}
+                                 </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="product_barcode">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef>
+                                Barkod
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let transaction">
+                                 <span class="pr-6 whitespace-nowrap">
+                                     {{transaction.product_barcode}}
+                                 </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="product_name">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef>
+                                Ürün Adı
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let transaction">
+                                 <span class="pr-6 whitespace-nowrap">
+                                     {{transaction.product_name}}
+                                 </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="product_short_description">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef>
+                                Açıklama
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let transaction">
+                                 <span class="pr-6 whitespace-nowrap">
+                                     {{transaction.product_short_description}}
+                                 </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="product_price">
+                            <th
+                                mat-header-cell class="text-right"
+                                *matHeaderCellDef>
+                                Fiyat
+                            </th>
+                            <td
+                                mat-cell class="text-right"
+                                *matCellDef="let transaction">
+                                 <span class="whitespace-nowrap ">
+                                     {{ transaction.product_price }} ₺
+                                 </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="status">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef>
+                            </th>
+                            <td
+                                mat-cell class="text-right"
+                                *matCellDef="let transaction">
+                                <mat-icon [svgIcon]="'heroicons_outline:x'"  class="cursor-pointer" (click)="RemoveProductFromCart(transaction)"></mat-icon>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="listCol"></tr>
+                        <tr class="order-row h-16" mat-row *matRowDef="let row; columns: listCol;"></tr>
+                    </table>
+                </ng-container>
+            </div>
+            <div class="flex items-center mt-auto">
+            </div>
+        </div>
+        <!-- Budget -->
+        <div class="flex flex-col flex-auto p-6 bg-card rounded-2xl shadow mb-4">
+            <ng-container *ngIf="(carts$ | async) as carts;">
+                <div class="flex items-center">
+                    <div class="flex flex-col">
+                        <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate"></div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    {{carts.customer.first_name}} {{carts.customer.last_name}}
+                </div>
+                <hr/>
+                <div class="flex flex-row flex-wrap mt-4 -mx-6">
+                    <div class="flex flex-col mx-6 my-3">
+                        <div class="text-sm font-medium leading-none text-secondary">Toplam</div>
+                        <div class="mt-2 font-medium text-3xl leading-none">Ödenecek Tutar:</div>
+                    </div>
+                    <div class="flex flex-col mx-6 my-3">
+                        <div class="text-sm font-medium leading-none text-secondary">Tutar</div>
+                        <div class="mt-2 font-medium text-3xl leading-none">{{total|currency:'TRY' }} </div>
+                    </div>
+                </div>
+                <div class="flex items-center mt-auto">
+                    <button
+                        class="mt-2"
+                        mat-stroked-button (click)="UpdateCart('Completed',carts.order_id)">
+                        Sepeti Tamamla
+                    </button>
+
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+    <ng-template #customer_none>Müşteri Seçiniz!</ng-template>
+</div>

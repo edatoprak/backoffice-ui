@@ -1,0 +1,234 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container
+        class="flex-auto h-full bg-card dark:bg-transparent"
+    >
+
+        <!-- Drawer -->
+        <mat-drawer
+            class="w-full md:w-160 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="false"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col flex-auto overflow-hidden bg-gray-50 dark:bg-transparent">
+            <ng-container *ngIf="(users$ | async) as users;">
+
+                <!-- Main -->
+                <div class="sm:mb-18 h-screen  flex flex-col flex-auto p-3 md:p-4 mb-4">
+
+                    <!-- Header -->
+                    <div class="flex items-center">
+
+                        <!-- Main actions -->
+                        <div class="flex items-center flex-auto">
+                            <!-- Search -->
+                            <div class="flex-auto">
+                                <mat-form-field
+                                    class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        matPrefix
+                                        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                    <input
+                                        matInput
+                                        [autocomplete]="'off'"
+                                        [placeholder]="'Kullanıcı Ara'"
+                                        #searchInput>
+                                </mat-form-field>
+                            </div>
+                            <button
+                                class="ml-4"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [routerLink]="['/user/add']"
+                            >
+                                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                                <span class="ml-2 mr-1">Yeni Üye</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Contacts list -->
+                    <div class="flex flex-auto overflow-hidden">
+                        <!-- Products list -->
+                        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden">
+
+
+                            <div
+                                class="overflow-x-auto sm:overflow-y-auto h-screen"
+                                cdkScrollable
+                            >
+
+                                <table
+                                    class="w-full min-w-240 table-fixed bg-transparent"
+                                    [ngClass]="{ 'pointer-events-none': isLoading }"
+                                    mat-table
+                                    matSort
+                                    [multiTemplateDataRows]="true"
+                                    [dataSource]="(users$ | async).Users"
+                                >
+
+
+                                    <ng-container matColumnDef="first_name">
+                                        <th
+                                            class="
+                                            w-40
+                                            bg-gray-50
+                                            dark:bg-black dark:bg-opacity-5
+                                        "
+                                            mat-header-cell
+                                            *matHeaderCellDef
+                                            mat-sort-header
+                                            disableClear
+                                        >
+                                            Ad
+                                        </th>
+                                        <td class="pr-4" mat-cell *matCellDef="let user">
+                                            {{ user.first_name }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="last_name">
+                                        <th
+                                            class="
+                                            w-40
+                                            bg-gray-50
+                                            dark:bg-black dark:bg-opacity-5
+                                        "
+                                            mat-header-cell
+                                            *matHeaderCellDef
+                                            mat-sort-header
+                                            disableClear
+                                        >
+                                            Soyad
+                                        </th>
+
+                                        <td class="pr-4" mat-cell *matCellDef="let user">
+                                            {{ user.last_name }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="title">
+                                        <th
+                                            class="
+                                            w-40
+                                            bg-gray-50
+                                            dark:bg-black dark:bg-opacity-5
+                                        "
+                                            mat-header-cell
+                                            *matHeaderCellDef
+                                            mat-sort-header
+                                            disableClear
+                                        >
+                                            Unvan
+                                        </th>
+                                        <td class="pr-4" mat-cell *matCellDef="let user">
+                                            {{ user.title }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="email">
+                                        <th
+                                            class="
+                                            w-40
+                                            bg-gray-50
+                                            dark:bg-black dark:bg-opacity-5
+                                        "
+                                            mat-header-cell
+                                            *matHeaderCellDef
+                                            mat-sort-header
+                                            disableClear
+                                        >
+                                            E-posta
+                                        </th>
+
+                                        <td class="pr-4" mat-cell *matCellDef="let user">
+                                            {{ user.email }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="phone_number">
+                                        <th
+                                            class="
+                                            w-40
+                                            bg-gray-50
+                                            dark:bg-black dark:bg-opacity-5
+                                        "
+                                            mat-header-cell
+                                            *matHeaderCellDef
+                                            mat-sort-header
+                                            disableClear
+                                        >
+                                            Telefon
+                                        </th>
+                                        <td class="pr-4" mat-cell *matCellDef="let user">
+                                            {{ user.phone_number }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="address">
+                                        <th
+                                            class="
+                                            w-40
+                                            bg-gray-50
+                                            dark:bg-black dark:bg-opacity-5
+                                        "
+                                            mat-header-cell
+                                            *matHeaderCellDef
+                                            mat-sort-header
+                                            disableClear
+                                        >
+                                            Konum
+                                        </th>
+                                        <td class="pr-4" mat-cell *matCellDef="let user">
+                                            {{ user.address }}
+                                        </td>
+                                    </ng-container>
+
+                                    <tr
+                                        class="shadow"
+                                        mat-header-row
+                                        *matHeaderRowDef="usersTableColumns; sticky: true"
+                                    ></tr>
+                                    <tr
+                                        class="h-18 hover:bg-gray-100 dark:hover:bg-hover"
+                                        mat-row
+                                        *matRowDef="
+                                        let user;
+                                        columns: usersTableColumns
+                                    "
+                                        [routerLink]="'/user/detail/'+ user.user_id"
+                                    ></tr>
+                                </table>
+                            </div>
+
+
+                            <!-- <ng-template #noProducts>
+                                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no
+                                    products!
+                                </div>
+                            </ng-template> -->
+                        </div>
+                    </div>
+                </div>
+                <mat-paginator (page)="paging($event)"
+                               class="flex absolute inset-x-0 bottom-0 border-b border-t border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                               [length]="users.Pagination.total_elements"
+                               [pageIndex]="users.Pagination.page"
+                               [pageSize]="users.Pagination.size"
+                               [hidePageSize]="true"
+                               [pageSizeOptions]="[5, 10, 20, 100]"
+                               [showFirstLastButtons]="true"></mat-paginator>
+
+            </ng-container>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

@@ -1,0 +1,176 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full max-w-4xl">
+            <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
+                Ürün Detay
+            </div>
+            <!-- Form -->
+            <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <fuse-alert
+                    class="mb-8"
+                    *ngIf="alert"
+                    [type]="alert.type"
+                    [showIcon]="false">
+                    {{alert.message}}
+                </fuse-alert>
+                <form
+                    class="space-y-3"
+                    [formGroup]="productForm"
+                    #supportNgForm="ngForm">
+                    <!-- Avatar -->
+                    <div class="flex flex-auto items-end">
+                        <div class="relative flex items-center justify-center w-32 h-32  overflow-hidden ring-4 ring-bg-card">
+                            <!-- Upload / Remove avatar -->
+                            <div class="absolute inset-0 bg-black bg-opacity-50 z-10" *ngIf="!localUrl"></div>
+                            <div class="absolute inset-0 flex items-end justify-between  z-20">
+                                <div class="bg-black bg-opacity-50">
+                                    <input
+                                        id="avatar-file-input"
+                                        class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                        type="file"
+                                        [multiple]="false"
+                                        [accept]="'image/jpeg, image/png'"
+                                        (change)="uploadAvatar(avatarFileInput.files)"
+                                        #avatarFileInput>
+                                    <label
+                                        class="flex items-center justify-center w-10 h-10  cursor-pointer hover:bg-hover"
+                                        for="avatar-file-input"
+                                        matRipple>
+                                        <mat-icon
+                                            class="text-white"
+                                            [svgIcon]="'heroicons_outline:camera'"></mat-icon>
+                                    </label>
+                                </div>
+                                <div class="bg-black bg-opacity-50">
+                                    <button
+                                        mat-icon-button
+                                        (click)="removeAvatar()">
+                                        <mat-icon
+                                            class="text-white"
+                                            [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <img class="w-full h-full object-contain"  [src]="localUrl" *ngIf="localUrl">
+                        </div>
+                    </div>
+                    <!-- Name -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'product_name'"
+                            [required]="true">
+                        <mat-label>Ürün Adı</mat-label>
+                        <mat-error *ngIf="productForm.get('product_name').hasError('required')">
+                            Zorunlu
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="fuse-mat-no-subscript w-full" *ngIf="(categories$ | async).Categories">
+                        <mat-label>Kategori</mat-label>
+                        <mat-select placeholder="Kategori"
+                                    [compareWith]="compareObjects"
+                                    [formControlName]="'category_name'" (selectionChange)="selectCategory($event)">
+                            <mat-option
+                                *ngFor="let category of (categories$ | async).Categories"
+                                [value]="category">
+                                {{category.category_name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <ng-container formArrayName="attributes" *ngIf="productForm['controls'].attributes['controls']">
+                        <div class=" flex flex-row justify-between" *ngFor="let attr of productForm['controls'].attributes['controls']; let i = index" [formGroupName]="i">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>{{attr.controls['attribute_title'].value}}</mat-label>
+                                <mat-select  [compareWith]="compareAttr" placeholder="Seçiniz"  [formControlName]="'attribute_select'">
+                                    <mat-option *ngFor="let attritem of attrArrays[attr.controls['attribute_title'].value]" [value]="attritem">
+                                        {{attritem.attribute_value}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+                    <!-- Email -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'barcode'"
+                            [required]="true">
+                        <mat-label>Barkod</mat-label>
+                        <mat-error *ngIf="productForm.get('barcode').hasError('required')">
+                            Zorunlu
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- Email -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'units_in_stock'"
+                            [required]="true">
+                        <mat-label>Stok</mat-label>
+                        <mat-error *ngIf="productForm.get('units_in_stock').hasError('required')">
+                            Zorunlu
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- Email -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'price'"
+                            [required]="true">
+                        <mat-label>Fiyat</mat-label>
+                        <mat-error *ngIf="productForm.get('price').hasError('required')">
+                            Zorunlu
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- Subject -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'short_description'"
+                            [required]="true">
+                        <mat-label>Kısa Açıklama</mat-label>
+                        <mat-error *ngIf="productForm.get('short_description').hasError('required')">
+                            Zorunlu
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- Message -->
+                    <mat-form-field class="fuse-mat-textarea w-full">
+                        <textarea
+                            matInput
+                            [formControlName]="'description'"
+                            [required]="true"
+                            [rows]="5"
+                            matTextareaAutosize></textarea>
+                        <mat-label>Açıklama</mat-label>
+                        <mat-error *ngIf="productForm.get('description').hasError('required')">
+                            Zorunlu
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button
+                            mat-button
+                            [color]="'accent'"
+                            [disabled]="productForm.pristine || productForm.untouched"
+                            (click)="clearForm()">
+                            Temizle
+                        </button>
+                        <button
+                            class="ml-2"
+                            mat-flat-button
+                            [color]="'primary'"
+                            [disabled]="productForm.invalid"
+                            (click)="sendForm()">
+                            Onayla
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

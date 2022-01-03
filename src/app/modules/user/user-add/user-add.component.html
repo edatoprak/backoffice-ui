@@ -1,0 +1,250 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full max-w-4xl">
+            <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
+                Yeni Üye
+            </div>
+            <!-- Form -->
+            <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <ng-container>
+                    <form [formGroup]="userForm" #supportNgForm="ngForm" class="flex flex-col w-full">
+                        <ng-container>
+                            <div class="flex flex-col sm:flex-row p-8">
+                                <div class="flex flex-auto flex-wrap">
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>Ad</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                        <input
+                                            matInput
+                                            [placeholder]="'Ad'"
+                                            [formControlName]="'first_name'"
+                                            [spellcheck]="false">
+                                        <mat-error *ngIf="userForm.get('first_name').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>Soyad</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                        <input
+                                            matInput
+                                            [placeholder]="'Soyad'"
+                                            [formControlName]="'last_name'"
+                                            [spellcheck]="false">
+                                        <mat-error *ngIf="userForm.get('last_name').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>Telefon</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:phone'"></mat-icon>
+                                        <input
+                                            matInput
+                                            [formControlName]="'phone_number'"
+                                            [placeholder]="'Telefon'">
+                                        <mat-error *ngIf="userForm.get('phone_number').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>E-posta</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input
+                                            matInput
+                                            [formControlName]="'email'"
+                                            [placeholder]="'E-posta'">
+                                        <mat-error *ngIf="userForm.get('email').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>Parola</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input
+                                            matInput
+                                            [formControlName]="'password'"
+                                            [placeholder]="'Şifre'">
+                                        <mat-error *ngIf="userForm.get('password').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>Parola (Tekrar)</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input
+                                            matInput
+                                            [formControlName]="'confirm_password'"
+                                            [placeholder]="'Şifre (Tekrar)'">
+                                        <mat-error
+                                            *ngIf="userForm.get('confirm_password').errors && userForm.get('confirm_password').errors.required">
+                                            Zorunlu
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="userForm.get('confirm_password').errors && userForm.get('confirm_password').errors.confirmPasswordValidator">
+                                            Parola ve parolayı onayla eşleşmedi
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>Ülke</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                        <mat-select [formControlName]="'country_id'" placeholder="Ülke"
+                                                    (selectionChange)='selectChangedCountry($event)'>
+                                            <mat-option *ngFor="let country of (countries$ | async).Countries"
+                                                        [value]="country.country_id">
+                                                {{country.country_name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="userForm.get('country_id').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>İl</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                        <mat-select [formControlName]="'city_id'" placeholder="İl"
+                                                    (selectionChange)='selectChangedCity($event)'>
+                                            <mat-option *ngFor="let city of (cities$ | async).Cities"
+                                                        [value]="city.city_id">
+                                                {{ city.city_name }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="userForm.get('city_id').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>İlçe</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                        <mat-select [formControlName]="'district_id'"
+                                                    placeholder="İlçe">
+                                            <mat-option *ngFor="let district of (districts$ | async).Districts"
+                                                        [value]="district.district_id">
+                                                {{district.district_name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="userForm.get('district_id').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>Adres</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input
+                                            matInput
+                                            [formControlName]="'address'"
+                                            [placeholder]="'Adres'">
+                                        <mat-error *ngIf="userForm.get('address').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="w-full lg:w-2/4 px-2">
+                                        <mat-label>Unvan</mat-label>
+                                        <mat-icon
+                                            matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input
+                                            matInput
+                                            [formControlName]="'title'"
+                                            [placeholder]="'Unvan'">
+                                        <mat-error *ngIf="userForm.get('title').hasError('required')">
+                                            Zorunlu
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="w-full lg:w-2/4 px-2" appearance="fill">
+                                        <mat-label>Roles</mat-label>
+                                        <mat-chip-list #chipList aria-label="Role selection">
+                                            <mat-chip
+                                                *ngFor="let role of roles"
+                                                [selectable]="selectable"
+                                                [removable]="removable"
+                                                (removed)="remove(role)">
+                                                {{role}}
+                                                <button matChipRemove *ngIf="removable">
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input id="roleInput"
+                                                placeholder="New role..."
+                                                #roleInput
+                                                [formControl]="roleCtrl"
+                                                [matAutocomplete]="auto"
+                                                [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                (matChipInputTokenEnd)="add($event)">
+                                        </mat-chip-list>
+                                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                            <mat-option *ngFor="let role of allRoles" [value]="role.role_id">
+                                                {{role.role_name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <div class="flex items-center justify-between w-full border-t px-8 py-4">
+                            <button
+                                class="-ml-4"
+                                mat-button
+                                [disabled]="userForm.pristine || userForm.untouched"
+                                [color]="'accent'"
+                                (click)="clearForm(supportNgForm)">
+                                Temizle
+                            </button>
+                            <div class="flex items-center">
+
+                                <button
+                                    class="submit"
+                                    mat-flat-button
+                                    [color]="'primary'"
+                                    (click)="saveUser()">
+                                    Kaydet
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+
